@@ -8,6 +8,6 @@ I m using [Worker service template](https://docs.microsoft.com/en-us/aspnet/core
 and [Coravel](https://github.com/jamesmh/coravel)
 in order to schedule some useless tasks.
 
-> 'Coravel' offer a fluent api in order to schedule synchronous, asynchronous, invocable tasks, etc.
+> `Coravel` offer a fluent api in order to schedule synchronous, asynchronous, invocable tasks, etc.
 
 **`Tools`** : vs19, net core 3.1
