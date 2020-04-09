@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Coravel;
+using Coravel.Invocable;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,7 @@ namespace App
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddScheduler();
+                    services.AddTransient<Job>();
                     services.AddHostedService<Worker>();
                 });
 
@@ -39,6 +41,11 @@ namespace App
                 scheduler
                     .ScheduleAsync(AsynchronousTask)
                     .EveryTenSeconds();
+
+                scheduler
+                    .Schedule<Job>()
+                    .EveryThirtySeconds();
+
             }).OnError(ex => ConsoleColor.Red.WriteLine(ex));
         }
 
@@ -47,10 +54,19 @@ namespace App
             ConsoleColor.Cyan.WriteLine("Running synchronous task.");
         }
 
-        private static async Task AsynchronousTask()
+        private static Task AsynchronousTask()
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
             ConsoleColor.Magenta.WriteLine("Running asynchronous task.");
+            return Task.CompletedTask;
+        }
+
+        private class Job : IInvocable
+        {
+            public Task Invoke()
+            {
+                ConsoleColor.Blue.WriteLine("Running invocable job.");
+                return Task.CompletedTask;
+            }
         }
     }
 }
