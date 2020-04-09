@@ -39,7 +39,7 @@ namespace App
                 scheduler
                     .ScheduleAsync(AsynchronousTask)
                     .EveryTenSeconds();
-            });
+            }).OnError(ex => ConsoleColor.Red.WriteLine(ex));
         }
 
         private static void SynchronousTask()
