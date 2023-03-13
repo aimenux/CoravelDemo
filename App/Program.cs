@@ -14,15 +14,14 @@ public static class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostContext, configApp) =>
+            .ConfigureAppConfiguration((_, configApp) =>
             {
                 configApp.AddCommandLine(args);
             })
-            .ConfigureServices((hostContext, services) =>
+            .ConfigureServices((_, services) =>
             {
                 services.AddScheduler();
                 services.AddTransient<Job>();
-                services.AddHostedService<Worker>();
             });
 
     private static void ConfigureScheduledTasks(this IHost host)
@@ -31,15 +30,15 @@ public static class Program
         {
             scheduler
                 .Schedule(SynchronousTask)
-                .EveryFiveSeconds();
+                .EverySeconds(10);
 
             scheduler
                 .ScheduleAsync(AsynchronousTask)
-                .EveryTenSeconds();
+                .EverySeconds(30);
 
             scheduler
                 .Schedule<Job>()
-                .EveryThirtySeconds();
+                .Cron("* * * * *");
 
         }).OnError(ex => ConsoleColor.Red.WriteLine(ex));
     }
