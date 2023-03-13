@@ -10,4 +10,4 @@ in order to schedule some dummy tasks.
 
 > `Coravel` offer a fluent api in order to schedule synchronous, asynchronous, invocable tasks, etc.
 
-**`Tools`** : vs19, net core 3.1
+**`Tools`** : vs22, net60, worker, coravel
